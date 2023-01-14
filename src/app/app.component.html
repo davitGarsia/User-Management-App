@@ -49,7 +49,7 @@
             class="text-blue-700 font-bold py-1 px-2 rounded mr-5 justify-center mt-1 flex gap-3 text-lg"
             type="button"
             mat-button
-            (click)="drawer.toggle()"
+            (click)="drawer.open()"
           >
             <span class="add material-icons cursor-pointer">add</span>
             Add
@@ -59,15 +59,6 @@
     </div>
 
     <mat-drawer #drawer class="example-sidenav" position="end" mode="side">
-      <!-- <button
-        class="hover:opacity-50 absolute top-5 right-10"
-        type="button"
-        mat-button
-        (click)="drawer.close()"
-      >
-        <span class="material-icons hover:opacity-50 absolute top-5 right-10" (click)="drawer.close()">close</span>
-      </button> -->
-
       <span
         class="material-icons hover:opacity-50 absolute top-5 right-10 cursor-pointer"
         (click)="drawer.close()"

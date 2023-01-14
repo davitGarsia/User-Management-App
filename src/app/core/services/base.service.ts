@@ -7,5 +7,9 @@ import { Observable } from 'rxjs';
 export class BaseService {
   apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient);
+  constructor(private http: HttpClient) {}
+
+  post<T>(url: string, body?: any): Observable<T> {
+    return this.http.post<T>(this.apiUrl + url, body);
+  }
 }
