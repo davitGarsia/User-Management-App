@@ -59,23 +59,102 @@
     </div>
 
     <mat-drawer #drawer class="example-sidenav" position="end" mode="side">
-      <button
+      <!-- <button
         class="hover:opacity-50 absolute top-5 right-10"
         type="button"
         mat-button
-        (click)="drawer.toggle()"
+        (click)="drawer.close()"
       >
-        <span class="material-icons">close</span>
-      </button>
+        <span class="material-icons hover:opacity-50 absolute top-5 right-10" (click)="drawer.close()">close</span>
+      </button> -->
+
+      <span
+        class="material-icons hover:opacity-50 absolute top-5 right-10 cursor-pointer"
+        (click)="drawer.close()"
+        >close</span
+      >
+
       <!---->
-      <div class="flex">
+      <form
+        class="w-72 max-w-lg pt-20 ml-3 mr-7"
+        [formGroup]="userForm"
+        (ngSubmit)="onSubmit()"
+      >
+        <mat-form-field class="w-full">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="John" formControlName="firstName" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Doe" formControlName="lastName" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="example@mail.com"
+            formControlName="email"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>ID</mat-label>
+          <input matInput placeholder="" formControlName="id" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>User Status</mat-label>
+          <mat-select formControlName="userStatus">
+            <!-- <mat-option *ngFor="let status of statuses" [value]="status.value">
+        {{ status.viewValue }}
+      </mat-option> -->
+            <mat-option value="active"> Active </mat-option>
+            <mat-option value="inactive"> Inactive </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Roles</mat-label>
+          <input matInput type="text" placeholder="" formControlName="roles" />
+        </mat-form-field>
+
+        <div class="flex justify-between ml-3 mr-7">
+          <button
+            type="button"
+            class="bg-gray-500 text-gray-100"
+            mat-button
+            (click)="drawer.close()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="bg-gray-500 text-white"
+            mat-button
+            [disabled]="!userForm.valid"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </mat-drawer>
+  </mat-drawer-container>
+
+  <router-outlet></router-outlet>
+</mat-drawer-container>
+
+<!--
+  <div class="flex">
         <form
-          class="w-full max-w-lg m-auto mt-10"
+          class="w-full max-w-lg mt-20"
           [formGroup]="userForm"
           (ngSubmit)="onSubmit()"
         >
           <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-1/2 mb-6 md:mb-0 px-3">
+            <div class="w-full md:w-11/12 sm:w-6/12 mb-6 md:mb-0 px-3">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for="firstname"
@@ -83,7 +162,7 @@
                 First Name
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white mb-3"
                 id="grid-first-name"
                 type="text"
                 placeholder="John"
@@ -104,7 +183,7 @@
                 >This field must include at least two characters</span
               >
             </div>
-            <div class="w-full md:w-1/2 px-3">
+            <div class="w-full md:w-11/12 sm:w-6/12 px-3">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for="lastname"
@@ -128,314 +207,85 @@
               >
             </div>
           </div>
-          <p class="text-xl mb-2">Contact Information</p>
-          <hr class="mb-5" />
-          <label
-            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-5"
-            for="email"
-          >
-            Email
-          </label>
-          <input
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-password"
-            type="email"
-            placeholder="example@gmail.com"
-            formControlName="email"
-          />
-          <span
-            *ngIf="
-              !userForm.get('email')?.valid &&
-              userForm.get('email')?.touched &&
-              !userForm.get('email')?.dirty
-            "
-            class="text-red-600 ml-2"
-            >This form cannot be empty</span
-          >
-          <span
-            *ngIf="userForm.get('email')?.errors?.['pattern']"
-            class="text-red-600 ml-2"
-            >Please, input a valid email address</span
-          >
 
-          <label
-            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mt-5"
-            for="phone"
-          >
-            Phone
-          </label>
-          <input
-            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            id="grid-password"
-            type=""
-            placeholder="+995 555 55 55 55"
-            formControlName="phone"
-          />
-          <p
-            *ngIf="userForm.get('phone')?.errors?.['pattern']
-            "
-            class="text-red-600 ml-2"
-          >
-            Please, enter a valid number
-          </p>
-          <p
-            *ngIf="userForm.get('phone')?.errors?.['minlength']
-            "
-            class="text-red-600 ml-2"
-          >
-            Characters cannot be less than 9
-          </p>
-          <p
-            *ngIf="userForm.get('phone')?.errors?.['maxlength']
-            "
-            class="text-red-600 ml-2"
-          >
-            Characters cannot be more than 12
-          </p>
-          <p
-            *ngIf="
-              !userForm.get('phone')?.valid &&
-              userForm.get('phone')?.touched &&
-              !userForm.get('phone')?.dirty
-            "
-            class="text-red-600 ml-2"
-          >
-            This form cannot be empty
-          </p>
 
-          <p class="text-xl mb-2 mt-8">Resources</p>
-          <hr class="mb-5" />
-
-          <div class="flex flex-wrap -mx-3 mb-6">
+          <div class="flex -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="ghlink"
+                for="email"
               >
-                Github Link
+                Email
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
-                type="text"
-                placeholder="https://github.com/yourName"
-                formControlName="ghLink"
+                class="appearance-none block w-full md:w-10/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                type="email"
+                placeholder="example@gmail.com"
+                formControlName="email"
               />
-              <p
+              <span
                 *ngIf="
-                  !userForm.get('ghLink')?.valid &&
-                  userForm.get('ghLink')?.touched &&
-                  !userForm.get('ghlink')?.dirty
+                  !userForm.get('email')?.valid &&
+                  userForm.get('email')?.touched &&
+                  !userForm.get('email')?.dirty
                 "
                 class="text-red-600 ml-2"
+                >This form cannot be empty</span
               >
-                This form cannot be empty
-              </p>
-              <p
-                *ngIf="
-                  userForm.get('ghLink')?.errors?.['pattern']
-                "
+              <span
+                *ngIf="userForm.get('email')?.errors?.['pattern']"
                 class="text-red-600 ml-2"
+                >Please, input a valid email address</span
               >
-                Please, enter a link to your github account
-              </p>
             </div>
-            <div class="w-full md:w-1/2 px-3">
+            <div class="w-full px-3 md:w-1/2">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="grid-last-name"
               >
-                Linkedin Link
+                User status
               </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="linkedin"
-                type="text"
-                placeholder="https://www.linkedin.com/in/yourProfile"
-                formControlName="linkedIn"
-              />
-
-              <p
-                *ngIf="
-                  !userForm.get('linkedIn')?.valid &&
-                  userForm.get('linkedIn')?.touched &&
-                  !userForm.get('linkedIn')?.dirty
-                "
-                class="text-red-600 ml-2"
+              <select
+                class="block w-full md:w-10/12 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                formControlName="userStatus"
               >
-                This form cannot be empty
-              </p>
-              <p
-                *ngIf="
-                  userForm.get('linkedIn')?.errors?.['pattern']
-                "
-                class="text-red-600 ml-2"
-              >
-                Please, enter a link to your LinkeIn account
-              </p>
+                <option value="" selected>Choose user status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
             </div>
           </div>
 
-          <p class="text-xl mb-2 mt-8">Experience</p>
-          <hr class="mb-5" />
-
           <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="workplace"
-              >
-                Place of Work
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
-                type="text"
-                placeholder="Company/business"
-                formControlName="workPlace"
-              />
-              <p
-                *ngIf="
-                  !userForm.get('workPlace')?.valid &&
-                  userForm.get('workPlace')?.touched &&
-                  !userForm.get('workPlace')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
-            </div>
-            <div class="w-full md:w-1/4 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="workstart"
-              >
-                From
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-last-name"
-                type="number"
-                placeholder="2019"
-                formControlName="workStart"
-              />
-
-              <p
-                *ngIf="
-                  !userForm.get('workStart')?.valid &&
-                  userForm.get('workStart')?.touched &&
-                  !userForm.get('workStart')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
-            </div>
-
-            <div class="w-full md:w-1/4 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="workend"
-              >
-                To
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-last-name"
-                type="number"
-                placeholder="2021"
-                formControlName="workEnd"
-              />
-              <p
-                *ngIf="
-                  !userForm.get('workEnd')?.valid &&
-                  userForm.get('workEnd')?.touched &&
-                  !userForm.get('workEnd')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
-            </div>
-          </div>
-
-          <p class="text-xl mb-2 mt-8">Education</p>
-          <hr class="mb-5" />
-
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <div class="w-full md:w-full mb-6 md:mb-0 px-3">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 for=""
               >
-                Institution
+                Id
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="grid-first-name"
+                class="appearance-none block w-full md:w-11/12 sm:w-6/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                 type="text"
-                for="institution"
-                placeholder="University/College"
-                formControlName="institution"
+                placeholder=""
+                formControlName="id"
               />
-              <p
-                *ngIf="
-                  !userForm.get('institution')?.valid &&
-                  userForm.get('institution')?.touched &&
-                  !userForm.get('institution')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
             </div>
-            <div class="w-full md:w-1/4 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              >
-                From
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                type="number"
-                placeholder="2019"
-                formControlName="eduStart"
-              />
-              <p
-                *ngIf="
-                  !userForm.get('eduStart')?.valid &&
-                  userForm.get('eduStart')?.touched &&
-                  !userForm.get('eduStart')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
-            </div>
+          </div>
 
-            <div class="w-full md:w-1/4 px-3">
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-full mb-6 md:mb-0 px-3">
               <label
                 class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="grid-last-name"
+                for=""
               >
-                To
+                Roles
               </label>
               <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                type="number"
-                placeholder="2021"
-                formControlName="eduEnd"
+                class="appearance-none block w-full md:w-11/12 sm:w-6/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                type="text"
+                placeholder=""
+                formControlName="roles"
               />
-              <p
-                *ngIf="
-                  !userForm.get('eduEnd')?.valid &&
-                  userForm.get('eduEnd')?.touched &&
-                  !userForm.get('eduEnd')?.dirty
-                "
-                class="text-red-600 ml-2"
-              >
-                This form cannot be empty
-              </p>
             </div>
           </div>
           <div class="flex">
@@ -449,8 +299,5 @@
           </div>
         </form>
       </div>
-    </mat-drawer>
-  </mat-drawer-container>
 
-  <router-outlet></router-outlet>
-</mat-drawer-container>
+      <!-->

@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-sidenav-form',
+  templateUrl: './sidenav-form.component.html',
+  styleUrls: ['./sidenav-form.component.css'],
 })
-export class AppComponent implements OnInit {
-  title = 'user-management-page';
-
+export class SidenavFormComponent implements OnInit {
   userForm!: FormGroup;
   showFiller = false;
 

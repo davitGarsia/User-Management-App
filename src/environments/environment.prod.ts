@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://development.api.optio.ai/api/v2/admin/users/',
 };
