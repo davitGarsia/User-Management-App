@@ -66,7 +66,8 @@
       >
 
       <!---->
-      <form
+
+      <!-- <form
         class="w-72 max-w-lg pt-20 ml-3 mr-7"
         [formGroup]="userForm"
         (ngSubmit)="onSubmit()"
@@ -99,9 +100,6 @@
         <mat-form-field appearance="fill">
           <mat-label>User Status</mat-label>
           <mat-select formControlName="userStatus">
-            <!-- <mat-option *ngFor="let status of statuses" [value]="status.value">
-        {{ status.viewValue }}
-      </mat-option> -->
             <mat-option value="active"> Active </mat-option>
             <mat-option value="inactive"> Inactive </mat-option>
           </mat-select>
@@ -130,165 +128,9 @@
             Save
           </button>
         </div>
-      </form>
+      </form> -->
+      <app-sidenav-form></app-sidenav-form>
     </mat-drawer>
   </mat-drawer-container>
-
   <router-outlet></router-outlet>
 </mat-drawer-container>
-
-<!--
-  <div class="flex">
-        <form
-          class="w-full max-w-lg mt-20"
-          [formGroup]="userForm"
-          (ngSubmit)="onSubmit()"
-        >
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-11/12 sm:w-6/12 mb-6 md:mb-0 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="firstname"
-              >
-                First Name
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white mb-3"
-                id="grid-first-name"
-                type="text"
-                placeholder="John"
-                formControlName="firstName"
-              />
-              <span
-                *ngIf="
-                  !userForm.get('firstName')?.valid &&
-                  userForm.get('firstName')?.touched &&
-                  !userForm.get('firstName')?.dirty
-                "
-                class="text-red-600 ml-2"
-                >This field must not be empty</span
-              >
-              <span
-                *ngIf="userForm.get('firstName')?.errors?.['minlength']"
-                class="text-red-600 ml-2"
-                >This field must include at least two characters</span
-              >
-            </div>
-            <div class="w-full md:w-11/12 sm:w-6/12 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="lastname"
-              >
-                Last Name
-              </label>
-              <input
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-last-name"
-                type="text"
-                placeholder="Doe"
-                formControlName="lastName"
-              />
-              <span
-                *ngIf="
-                  !userForm.get('lastName')?.valid &&
-                  userForm.get('lastName')?.touched
-                "
-                class="text-red-600 ml-2"
-                >This field must include at least one character</span
-              >
-            </div>
-          </div>
-
-
-          <div class="flex -mx-3 mb-6">
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for="email"
-              >
-                Email
-              </label>
-              <input
-                class="appearance-none block w-full md:w-10/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                type="email"
-                placeholder="example@gmail.com"
-                formControlName="email"
-              />
-              <span
-                *ngIf="
-                  !userForm.get('email')?.valid &&
-                  userForm.get('email')?.touched &&
-                  !userForm.get('email')?.dirty
-                "
-                class="text-red-600 ml-2"
-                >This form cannot be empty</span
-              >
-              <span
-                *ngIf="userForm.get('email')?.errors?.['pattern']"
-                class="text-red-600 ml-2"
-                >Please, input a valid email address</span
-              >
-            </div>
-            <div class="w-full px-3 md:w-1/2">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              >
-                User status
-              </label>
-              <select
-                class="block w-full md:w-10/12 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                formControlName="userStatus"
-              >
-                <option value="" selected>Choose user status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-full mb-6 md:mb-0 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for=""
-              >
-                Id
-              </label>
-              <input
-                class="appearance-none block w-full md:w-11/12 sm:w-6/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                type="text"
-                placeholder=""
-                formControlName="id"
-              />
-            </div>
-          </div>
-
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full md:w-full mb-6 md:mb-0 px-3">
-              <label
-                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                for=""
-              >
-                Roles
-              </label>
-              <input
-                class="appearance-none block w-full md:w-11/12 sm:w-6/12 bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
-                type="text"
-                placeholder=""
-                formControlName="roles"
-              />
-            </div>
-          </div>
-          <div class="flex">
-            <button
-              type="submit"
-              class="m-auto mt-5 mb-10 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-              [disabled]="!userForm.valid"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-->
