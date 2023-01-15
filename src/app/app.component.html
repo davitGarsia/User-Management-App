@@ -9,44 +9,67 @@
     </div>
 
     <div class="container w-11/12 h-auto bg-white mx-auto mt-10">
-      <div class="flex justify-end gap-3 pt-5 pb-5">
-        <form>
-          <label
-            for="default-search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >Search</label
-          >
-          <div class="relative">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                ></path>
-              </svg>
-            </div>
-            <input
-              type="search"
-              class="block w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 outline-none"
-              placeholder="Search Users"
-            />
-          </div>
-        </form>
+      <div class="flex justify-between gap-3 pt-5 pb-5">
+        <!--Table-->
 
-        <div class="flex">
+        <div class="flex flex-col ml-5 w-10/12">
+          <mat-form-field class="mb-8">
+            <mat-label>Search users</mat-label>
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Ex. Mia"
+              #input
+            />
+          </mat-form-field>
+          <div class="mat-elevation-z8 w-full">
+            <table mat-table [dataSource]="dataSource" matSort class="w-full">
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+              </ng-container>
+
+              <!-- Progress Column -->
+              <ng-container matColumnDef="progress">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Progress
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.progress }}%</td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+              </ng-container>
+
+              <!-- Fruit Column -->
+              <ng-container matColumnDef="fruit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Fruit</th>
+                <td mat-cell *matCellDef="let row">{{ row.fruit }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                  No data matching the filter "{{ input.value }}"
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              [pageSizeOptions]="[5, 10, 25, 100]"
+              aria-label="Select page of users"
+            ></mat-paginator>
+          </div>
+        </div>
+        <div class="flex w-24 h-10">
           <button
-            class="text-blue-700 font-bold py-1 px-2 rounded mr-5 justify-center mt-1 flex gap-3 text-lg"
+            class="text-blue-700 font-bold py-1 px-2 rounded mr-5 mt-1 flex gap-3 text-lg"
             type="button"
             mat-button
             (click)="drawer.open()"
@@ -55,6 +78,7 @@
             Add
           </button>
         </div>
+        <!---->
       </div>
     </div>
 
@@ -65,9 +89,7 @@
         >close</span
       >
 
-      <!---->
-
-      <!-- <form
+      <form
         class="w-72 max-w-lg pt-20 ml-3 mr-7"
         [formGroup]="userForm"
         (ngSubmit)="onSubmit()"
@@ -128,9 +150,10 @@
             Save
           </button>
         </div>
-      </form> -->
-      <app-sidenav-form></app-sidenav-form>
+      </form>
     </mat-drawer>
   </mat-drawer-container>
   <router-outlet></router-outlet>
 </mat-drawer-container>
+
+<!--  -->
