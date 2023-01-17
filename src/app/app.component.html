@@ -79,6 +79,10 @@
 
             <mat-paginator
               [pageSizeOptions]="[5, 10, 25, 100]"
+              [pageIndex]="pageIndex"
+              [pageSize]="pageSize"
+              [length]="total"
+              (page)="pageEvent($event)"
               aria-label="Select page of users"
             ></mat-paginator>
           </div>

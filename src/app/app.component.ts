@@ -12,7 +12,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs';
@@ -27,6 +27,10 @@ import { SaveUserService } from './core/services/save-user.service';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'user-management-page';
   showFiller = false;
+
+  total = 0;
+  pageIndex = 0;
+  pageSize = 5;
 
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -50,30 +54,29 @@ export class AppComponent implements OnInit, AfterViewInit {
   // Getting Users
 
   ngOnInit() {
-    const users = {
-      search: '',
-      sortBy: 'email',
-      sortDirection: 'asc',
-      pageIndex: 0,
-      pageSize: 20,
-      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-      excludes: [],
-    };
-
-    this.GetUsersService.getUsers(users)
-      .pipe(
-        map((responseData: any) => {
-          let resArray: any = [];
-
-          responseData.data.entities.forEach((entity: any) => {
-            resArray.push(entity);
-          });
-          return resArray;
-        })
-      )
-      .subscribe((res) => {
-        this.dataSource = res;
-      });
+    this.getUsers();
+    // const users = {
+    //   search: '',
+    //   sortBy: 'email',
+    //   sortDirection: 'asc',
+    //   pageIndex: 0,
+    //   pageSize: 20,
+    //   includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+    //   excludes: [],
+    // };
+    // this.GetUsersService.getUsers(users)
+    //   .pipe(
+    //     map((responseData: any) => {
+    //       let resArray: any = [];
+    //       responseData.data.entities.forEach((entity: any) => {
+    //         resArray.push(entity);
+    //       });
+    //       return resArray;
+    //     })
+    //   )
+    //   .subscribe((res) => {
+    //     this.dataSource = res;
+    //   });
   }
 
   userForm: FormGroup = new FormGroup({
@@ -123,7 +126,45 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.rolesArray.push(new FormControl(''));
   }
 
+  getUsers() {
+    const users = {
+      search: '',
+      sortBy: 'email',
+      sortDirection: 'asc',
+      pageIndex: 0,
+      pageSize: 20,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+
+    this.GetUsersService.getUsers(users).subscribe(({ data }) => {
+      this.dataSource = data.entities;
+      this.total = data.total;
+    });
+  }
+
+  pageEvent($event: PageEvent) {
+    this.pageIndex = $event.pageIndex;
+    this.pageSize = $event.pageSize;
+    this.getUsers();
+  }
+
   ngAfterViewInit(): void {
+    // this.GetUsersService.getUsers(users)
+    //   .pipe(
+    //     map((responseData: any) => {
+    //       let resArray: any = [];
+
+    //       responseData.data.entities.forEach((entity: any) => {
+    //         resArray.push(entity);
+    //       });
+    //       return resArray;
+    //     })
+    //   )
+    //   .subscribe((res) => {
+    //     this.dataSource = res;
+    //   });
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
