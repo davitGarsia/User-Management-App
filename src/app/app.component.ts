@@ -15,7 +15,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
+import { map } from 'rxjs';
 import { GetUsersService } from './core/services/get-users.service';
 import { SaveUserService } from './core/services/save-user.service';
 
@@ -25,6 +25,10 @@ import { SaveUserService } from './core/services/save-user.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  title = 'user-management-page';
+  showFiller = false;
+
+  dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -36,20 +40,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     'role',
     'status',
   ];
-  dataSource!: MatTableDataSource<unknown>;
-
-  title = 'user-management-page';
-
-  showFiller = false;
 
   constructor(
     private saveUserService: SaveUserService,
     private GetUsersService: GetUsersService
-  ) {
-    //const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
-    // Assign the data to the data source for the table to render
-    //this.dataSource = new MatTableDataSource(users);
-  }
+  ) {}
 
   ////////////////
   // Getting Users
@@ -64,15 +59,22 @@ export class AppComponent implements OnInit, AfterViewInit {
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
     };
-    this.GetUsersService.getUsers(users).subscribe((res) => {
-      console.log(res);
-      res.data.entities.forEach((entity: any) => {
-        this.dataSource = new MatTableDataSource(entity);
-      });
-    });
-  }
 
-  //////////////////////
+    this.GetUsersService.getUsers(users)
+      .pipe(
+        map((responseData: any) => {
+          let resArray: any = [];
+
+          responseData.data.entities.forEach((entity: any) => {
+            resArray.push(entity);
+          });
+          return resArray;
+        })
+      )
+      .subscribe((res) => {
+        this.dataSource = res;
+      });
+  }
 
   userForm: FormGroup = new FormGroup({
     //userStatus: new FormControl(null, Validators.required),
@@ -134,19 +136,3 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 }
-
-/** Builds and returns a new User. */
-// function createNewUser(id: number): UserData {
-//   const name =
-//     NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-//     ' ' +
-//     NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-//     '.';
-
-//   return {
-//     id: id.toString(),
-//     name: name,
-//     progress: Math.round(Math.random() * 100).toString(),
-//     fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-//   };
-// }
