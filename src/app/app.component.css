@@ -27,3 +27,7 @@ th {
   font-size: 14px;
   width: 100%;
 }
+
+.underline {
+  text-underline-offset: 3px;
+}
