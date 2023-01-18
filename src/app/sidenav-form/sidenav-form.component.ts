@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { ControlUsersService } from '../core/services/control-users.service';
+import { DrawerService } from '../core/services/drawer.service';
 
 @Component({
   selector: 'app-sidenav-form',
@@ -7,29 +10,61 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./sidenav-form.component.css'],
 })
 export class SidenavFormComponent implements OnInit {
-  userForm!: FormGroup;
   showFiller = false;
 
-  constructor() {}
+  constructor(
+    private controlUsersService: ControlUsersService,
+    private drawerService: DrawerService
+  ) {}
 
-  ngOnInit() {
-    this.userForm = new FormGroup({
-      firstName: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(2),
-      ]),
-      lastName: new FormControl(null, Validators.required),
-      email: new FormControl(null, [
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
-      ]),
-      userStatus: new FormControl(null, Validators.required),
-      id: new FormControl(null),
-      roles: new FormControl(null, Validators.required),
+  ngOnInit() {}
+
+  userForm: FormGroup = new FormGroup({
+    id: new FormControl(null),
+    email: new FormControl(null, [
+      Validators.required,
+      Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+    ]),
+    firstName: new FormControl(null, [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    lastName: new FormControl(null, Validators.required),
+    roles: new FormArray([]),
+  });
+
+  onSubmit() {
+    if (this.userForm.invalid) return;
+
+    const id = this.userForm.value.id;
+    const firstName = this.userForm.value.firstName;
+    const email = this.userForm.value.email;
+    const lastName = this.userForm.value.lastName;
+    const roles = this.userForm.get('roles')?.value;
+
+    const user = {
+      id: id,
+      firstName: firstName,
+      email: email,
+      lastName: lastName,
+      roles: roles,
+      locked: true,
+    };
+
+    this.controlUsersService.saveUser(user).subscribe((res) => {
+      console.log(res);
     });
   }
 
-  onSubmit() {
-    console.log(this.userForm);
+  get rolesArray() {
+    return <FormArray>this.userForm.get('roles');
+  }
+
+  onAddRole() {
+    this.rolesArray.push(new FormControl(''));
+  }
+
+  close() {
+    this.drawerService.closeDrawer();
   }
 }

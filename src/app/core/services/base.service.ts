@@ -12,4 +12,8 @@ export class BaseService {
   post<T>(url: string, body?: any): Observable<T> {
     return this.http.post<T>(this.apiUrl + url, body);
   }
+
+  delete(url: string, body?: any) {
+    return this.http.delete(this.apiUrl + url, body);
+  }
 }

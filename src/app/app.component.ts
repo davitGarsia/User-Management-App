@@ -1,26 +1,16 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import {
-  Form,
-  FormArray,
-  FormControl,
-  FormGroup,
-  Validators,
-  NgForm,
-} from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { map } from 'rxjs';
-import { GetUsersService } from './core/services/get-users.service';
-import { SaveUserService } from './core/services/save-user.service';
+import {
+  MatCellDef,
+  MatRow,
+  MatTableDataSource,
+} from '@angular/material/table';
+import { DrawerService } from './core/services/drawer.service';
+import { ControlUsersService } from './core/services/control-users.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -28,10 +18,11 @@ import { SaveUserService } from './core/services/save-user.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  title = 'user-management-page';
   searchTerm = '';
   @ViewChild('f') userInput!: NgForm;
-  title = 'user-management-page';
   showFiller = false;
+  id = '';
 
   total = 0;
   pageIndex = 0;
@@ -40,6 +31,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatDrawer) drawer!: MatDrawer;
 
   displayedColumns: string[] = [
     'id',
@@ -47,66 +39,27 @@ export class AppComponent implements OnInit, AfterViewInit {
     'last name',
     'email',
     'role',
-    'status',
+    'active',
+    'actions',
   ];
 
   constructor(
-    private saveUserService: SaveUserService,
-    private GetUsersService: GetUsersService
+    private controlUsersService: ControlUsersService,
+    private drawerService: DrawerService
   ) {}
 
-  ////////////////
   // Getting Users
 
   ngOnInit() {
     this.getUsers();
-  }
 
-  userForm: FormGroup = new FormGroup({
-    //userStatus: new FormControl(null, Validators.required),
-    id: new FormControl(null),
-    email: new FormControl(null, [
-      Validators.required,
-      Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
-    ]),
-    firstName: new FormControl(null, [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
-    lastName: new FormControl(null, Validators.required),
-    roles: new FormArray([]),
-  });
-
-  onSubmit() {
-    console.log(this.userForm.value);
-    if (this.userForm.invalid) return;
-
-    const id = this.userForm.value.id;
-    const firstName = this.userForm.value.firstName;
-    const email = this.userForm.value.email;
-    const lastName = this.userForm.value.lastName;
-    const roles = this.userForm.get('roles')?.value;
-
-    const user = {
-      id: id,
-      firstName: firstName,
-      email: email,
-      lastName: lastName,
-      roles: roles,
-      locked: true,
-    };
-
-    this.saveUserService.saveUser(user).subscribe((res) => {
-      console.log(res);
+    this.drawerService.isDrawerOpen$.subscribe((res: boolean) => {
+      if (res) {
+        this.drawer.open();
+      } else {
+        this.drawer?.close();
+      }
     });
-  }
-
-  get rolesArray() {
-    return <FormArray>this.userForm.get('roles');
-  }
-
-  onAddRole() {
-    this.rolesArray.push(new FormControl(''));
   }
 
   getUsers() {
@@ -120,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       excludes: [],
     };
 
-    this.GetUsersService.getUsers(users).subscribe(({ data }) => {
+    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
       this.dataSource = data.entities;
       this.total = data.total;
       this.dataSource.paginator = this.paginator;
@@ -137,11 +90,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {}
 
   applyFilter(term: any) {
-    //   const filterValue = (event.target as HTMLInputElement).value;
-    //   this.dataSource.filter = filterValue.trim().toLowerCase();
-    //   if (this.dataSource.paginator) {
-    //     this.dataSource.paginator.firstPage();
-    //   }
     const users = {
       search: `${term}`,
       sortBy: 'email',
@@ -151,11 +99,30 @@ export class AppComponent implements OnInit, AfterViewInit {
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
     };
-    this.GetUsersService.getUsers(users).subscribe(({ data }) => {
+    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
       this.dataSource = data.entities;
       this.total = data.total;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
+  }
+
+  // getRow(row: any) {
+  //   this.id = row.id;
+
+  //   console.log(this.id);
+  // }
+
+  removeData(row: any) {
+    this.id = row.id;
+    const userId = {
+      id: this.id,
+    };
+    console.log(userId);
+    if (!this.id == null) {
+      this.controlUsersService.deleteUser(userId).subscribe((res) => {
+        console.log(res);
+      });
+    }
   }
 }
