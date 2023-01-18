@@ -1,4 +1,6 @@
 import {
+  AfterContentChecked,
+  AfterContentInit,
   AfterViewInit,
   Component,
   OnDestroy,
@@ -11,6 +13,7 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  NgForm,
 } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -25,6 +28,8 @@ import { SaveUserService } from './core/services/save-user.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  searchTerm = '';
+  @ViewChild('f') userInput!: NgForm;
   title = 'user-management-page';
   showFiller = false;
 
@@ -55,28 +60,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getUsers();
-    // const users = {
-    //   search: '',
-    //   sortBy: 'email',
-    //   sortDirection: 'asc',
-    //   pageIndex: 0,
-    //   pageSize: 20,
-    //   includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-    //   excludes: [],
-    // };
-    // this.GetUsersService.getUsers(users)
-    //   .pipe(
-    //     map((responseData: any) => {
-    //       let resArray: any = [];
-    //       responseData.data.entities.forEach((entity: any) => {
-    //         resArray.push(entity);
-    //       });
-    //       return resArray;
-    //     })
-    //   )
-    //   .subscribe((res) => {
-    //     this.dataSource = res;
-    //   });
   }
 
   userForm: FormGroup = new FormGroup({
@@ -131,8 +114,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       search: '',
       sortBy: 'email',
       sortDirection: 'asc',
-      pageIndex: 0,
-      pageSize: 20,
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
     };
@@ -140,6 +123,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.GetUsersService.getUsers(users).subscribe(({ data }) => {
       this.dataSource = data.entities;
       this.total = data.total;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -149,31 +134,28 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.getUsers();
   }
 
-  ngAfterViewInit(): void {
-    // this.GetUsersService.getUsers(users)
-    //   .pipe(
-    //     map((responseData: any) => {
-    //       let resArray: any = [];
+  ngAfterViewInit(): void {}
 
-    //       responseData.data.entities.forEach((entity: any) => {
-    //         resArray.push(entity);
-    //       });
-    //       return resArray;
-    //     })
-    //   )
-    //   .subscribe((res) => {
-    //     this.dataSource = res;
-    //   });
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  applyFilter(term: any) {
+    //   const filterValue = (event.target as HTMLInputElement).value;
+    //   this.dataSource.filter = filterValue.trim().toLowerCase();
+    //   if (this.dataSource.paginator) {
+    //     this.dataSource.paginator.firstPage();
+    //   }
+    const users = {
+      search: `${term}`,
+      sortBy: 'email',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+    this.GetUsersService.getUsers(users).subscribe(({ data }) => {
+      this.dataSource = data.entities;
+      this.total = data.total;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 }

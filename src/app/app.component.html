@@ -13,15 +13,19 @@
         <!--Table-->
 
         <div class="flex flex-col ml-5 w-10/12">
-          <mat-form-field class="mt-10 mb-5">
-            <mat-label>Search users</mat-label>
-            <input
-              matInput
-              (keyup)="applyFilter($event)"
-              placeholder="Ex. Mia"
-              #input
-            />
-          </mat-form-field>
+          <form #f="ngForm" class="w-full">
+            <mat-form-field class="mt-10 mb-5">
+              <mat-label>Search users</mat-label>
+              <input
+                matInput
+                placeholder="David..."
+                #text="ngModel"
+                [(ngModel)]="searchTerm"
+                name="userInput"
+                (ngModelChange)="applyFilter($event)"
+              />
+            </mat-form-field>
+          </form>
           <div class="mat-elevation-z8 w-full">
             <table mat-table [dataSource]="dataSource" matSort class="w-full">
               <!-- ID Column -->
@@ -71,9 +75,7 @@
 
               <!-- Row shown when there is no matching data. -->
               <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">
-                  No data matching the filter "{{ input.value }}"
-                </td>
+                <td class="mat-cell" colspan="4"></td>
               </tr>
             </table>
 
