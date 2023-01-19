@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -10,19 +16,21 @@ import {
 } from '@angular/material/table';
 import { DrawerService } from './core/services/drawer.service';
 import { ControlUsersService } from './core/services/control-users.service';
-import { BehaviorSubject } from 'rxjs';
+
+import { MatButton } from '@angular/material/button';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogueComponent } from './dialogue/dialogue.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   title = 'user-management-page';
   searchTerm = '';
   @ViewChild('f') userInput!: NgForm;
   showFiller = false;
-  id = '';
 
   total = 0;
   pageIndex = 0;
@@ -32,6 +40,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatDrawer) drawer!: MatDrawer;
+  @ViewChild(MatButton) deleteButton!: MatButton;
 
   displayedColumns: string[] = [
     'id',
@@ -45,7 +54,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor(
     private controlUsersService: ControlUsersService,
-    private drawerService: DrawerService
+    private drawerService: DrawerService,
+    private dialog: MatDialog
   ) {}
 
   // Getting Users
@@ -87,8 +97,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.getUsers();
   }
 
-  ngAfterViewInit(): void {}
-
   applyFilter(term: any) {
     const users = {
       search: `${term}`,
@@ -107,22 +115,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // getRow(row: any) {
-  //   this.id = row.id;
+  openDialogue(id: any, e: any) {
+    if (e.target.innerHTML == 'delete') {
+      this.controlUsersService.userId.id = id;
 
-  //   console.log(this.id);
-  // }
-
-  removeData(row: any) {
-    this.id = row.id;
-    const userId = {
-      id: this.id,
-    };
-    console.log(userId);
-    if (!this.id == null) {
-      this.controlUsersService.deleteUser(userId).subscribe((res) => {
-        console.log(res);
-      });
+      let dialogRef = this.dialog.open(DialogueComponent, { width: '500px' });
     }
   }
 }

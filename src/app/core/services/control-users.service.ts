@@ -6,6 +6,9 @@ import { User } from '../interfaces/user';
 
 @Injectable({ providedIn: 'root' })
 export class ControlUsersService extends BaseService {
+  userId = {
+    id: '',
+  };
   getUsers(payload: FindUser): Observable<any> {
     return this.post<any>('find', payload);
   }
@@ -14,7 +17,7 @@ export class ControlUsersService extends BaseService {
     return this.post<any>('save', payload);
   }
 
-  deleteUser(payload: any) {
-    return this.delete('remove', payload);
+  deleteUser(payload: any): Observable<any> {
+    return this.post<any>('remove', payload);
   }
 }

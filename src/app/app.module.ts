@@ -15,8 +15,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogueComponent } from './dialogue/dialogue.component';
 @NgModule({
-  declarations: [AppComponent, SidenavFormComponent],
+  declarations: [AppComponent, SidenavFormComponent, DialogueComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,6 +33,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     MatSortModule,
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
   ],
   providers: [
     {
