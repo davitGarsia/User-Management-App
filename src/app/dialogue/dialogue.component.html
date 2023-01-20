@@ -1,7 +1,9 @@
-<div class="flex">
-  <p class="mx-auto">Are you sure you want to delete this user?</p>
+<div class="flex mb-5">
+  <p class="mx-auto text-lg">Are you sure you want to delete this user?</p>
 </div>
 <div class="flex">
-  <button mat-button (click)="closeDialog()">No</button>
-  <button mat-button (click)="deleteUser()">Yes</button>
+  <div class="flex mx-auto gap-10">
+    <button mat-button (click)="closeDialog()">No</button>
+    <button mat-button (click)="deleteUser()">Yes</button>
+  </div>
 </div>

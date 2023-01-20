@@ -13,25 +13,6 @@
   color: blue;
 }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-td,
-th {
-  width: 25%;
-}
-
-.mat-mdc-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-.underline {
-  text-underline-offset: 3px;
-}
-
 .ml {
   margin-left: 40px;
 }
