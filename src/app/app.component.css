@@ -31,3 +31,7 @@ th {
 .underline {
   text-underline-offset: 3px;
 }
+
+.ml {
+  margin-left: 40px;
+}

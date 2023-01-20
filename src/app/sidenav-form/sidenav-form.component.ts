@@ -97,5 +97,6 @@ export class SidenavFormComponent implements OnInit {
 
   close() {
     this.drawerService.closeDrawer();
+    this.userForm.reset();
   }
 }
