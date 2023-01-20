@@ -69,10 +69,19 @@ export class AppComponent implements OnInit {
     });
   }
 
+  fetchUsers(users: any) {
+    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
+      this.dataSource = data.entities;
+      this.total = data.total;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
+  }
+
   getUsers() {
     const users = {
       search: '',
-      sortBy: 'email',
+      sortBy: 'firstName',
       sortDirection: 'asc',
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
@@ -80,12 +89,7 @@ export class AppComponent implements OnInit {
       excludes: [],
     };
 
-    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
-      this.dataSource = data.entities;
-      this.total = data.total;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    this.fetchUsers(users);
   }
 
   pageEvent($event: PageEvent) {
@@ -122,5 +126,61 @@ export class AppComponent implements OnInit {
 
   emitToChild(id: any) {
     this.eventSubject.next(id);
+  }
+
+  sortByName() {
+    const users = {
+      search: '',
+      sortBy: 'firstName',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+
+    this.fetchUsers(users);
+  }
+
+  sortByLastName() {
+    const users = {
+      search: '',
+      sortBy: 'lastName',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+
+    this.fetchUsers(users);
+  }
+
+  sortByMail() {
+    const users = {
+      search: '',
+      sortBy: 'email',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+
+    this.fetchUsers(users);
+  }
+
+  sortByStatus() {
+    const users = {
+      search: '',
+      sortBy: 'locked',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+
+    this.fetchUsers(users);
   }
 }
