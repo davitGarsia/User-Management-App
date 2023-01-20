@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
 
 import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
@@ -12,15 +13,44 @@ import { DrawerService } from '../core/services/drawer.service';
 export class SidenavFormComponent implements OnInit {
   showFiller = false;
 
+  private eventSubscription!: Subscription;
+
+  @Input() events!: Observable<void>;
+
   constructor(
     private controlUsersService: ControlUsersService,
     private drawerService: DrawerService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.eventSubscription = this.events.subscribe((id) => {
+      this.drawerService.openDrawer();
+
+      const users = {
+        search: `${id}`,
+        sortBy: 'email',
+        sortDirection: 'asc',
+        pageIndex: 0,
+        pageSize: 5,
+        includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+        excludes: [],
+      };
+      this.controlUsersService.getUsers(users).subscribe((res) => {
+        console.log(res);
+        this.userForm.patchValue({
+          id: res.data.entities[0].id,
+          firstName: res.data.entities[0].firstName,
+          lastName: res.data.entities[0].lastName,
+
+          email: res.data.entities[0].email,
+        });
+      });
+    });
+  }
 
   userForm: FormGroup = new FormGroup({
     id: new FormControl(null),
+    userStatus: new FormControl(null),
     email: new FormControl(null, [
       Validators.required,
       Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
@@ -37,6 +67,7 @@ export class SidenavFormComponent implements OnInit {
     if (this.userForm.invalid) return;
 
     const id = this.userForm.value.id;
+    const status = (this.userForm.value.userStatus = 'Active' ? true : false);
     const firstName = this.userForm.value.firstName;
     const email = this.userForm.value.email;
     const lastName = this.userForm.value.lastName;
@@ -48,7 +79,7 @@ export class SidenavFormComponent implements OnInit {
       email: email,
       lastName: lastName,
       roles: roles,
-      locked: true,
+      locked: status,
     };
 
     this.controlUsersService.saveUser(user).subscribe((res) => {

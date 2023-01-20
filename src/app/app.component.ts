@@ -1,25 +1,21 @@
 import {
-  AfterViewInit,
   Component,
+  EventEmitter,
   OnInit,
+  Output,
   ViewChild,
-  ElementRef,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
-import {
-  MatCellDef,
-  MatRow,
-  MatTableDataSource,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { DrawerService } from './core/services/drawer.service';
 import { ControlUsersService } from './core/services/control-users.service';
 
-import { MatButton } from '@angular/material/button';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue/dialogue.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +28,8 @@ export class AppComponent implements OnInit {
   @ViewChild('f') userInput!: NgForm;
   showFiller = false;
 
+  eventSubject: Subject<void> = new Subject<void>();
+
   total = 0;
   pageIndex = 0;
   pageSize = 5;
@@ -40,7 +38,6 @@ export class AppComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatDrawer) drawer!: MatDrawer;
-  @ViewChild(MatButton) deleteButton!: MatButton;
 
   displayedColumns: string[] = [
     'id',
@@ -48,7 +45,7 @@ export class AppComponent implements OnInit {
     'last name',
     'email',
     'role',
-    'active',
+    'status',
     'actions',
   ];
 
@@ -121,5 +118,9 @@ export class AppComponent implements OnInit {
 
       let dialogRef = this.dialog.open(DialogueComponent, { width: '500px' });
     }
+  }
+
+  emitToChild(id: any) {
+    this.eventSubject.next(id);
   }
 }

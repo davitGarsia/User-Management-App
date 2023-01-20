@@ -28,6 +28,14 @@
     <input matInput placeholder="" formControlName="id" />
   </mat-form-field>
 
+  <mat-form-field appearance="fill">
+    <mat-label>User Status</mat-label>
+    <mat-select formControlName="userStatus">
+      <mat-option value="active"> Active </mat-option>
+      <mat-option value="inactive"> Inactive </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <div formArrayName="roles">
     <button
       type="button"

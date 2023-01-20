@@ -20,4 +20,8 @@ export class ControlUsersService extends BaseService {
   deleteUser(payload: any): Observable<any> {
     return this.post<any>('remove', payload);
   }
+
+  // getIndividualUser(payload: any): Observable<any> {
+  //   return this.post<any>('find-one', payload);
+  // }
 }
