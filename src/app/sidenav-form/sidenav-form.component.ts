@@ -36,7 +36,6 @@ export class SidenavFormComponent implements OnInit {
         excludes: [],
       };
       this.controlUsersService.getUsers(users).subscribe((res) => {
-        console.log(res);
         this.userForm.patchValue({
           id: res.data.entities[0].id,
           firstName: res.data.entities[0].firstName,
@@ -50,7 +49,7 @@ export class SidenavFormComponent implements OnInit {
 
   userForm: FormGroup = new FormGroup({
     id: new FormControl(null),
-    userStatus: new FormControl(null),
+    userStatus: new FormControl(null, Validators.required),
     email: new FormControl(null, [
       Validators.required,
       Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
@@ -60,7 +59,7 @@ export class SidenavFormComponent implements OnInit {
       Validators.minLength(2),
     ]),
     lastName: new FormControl(null, Validators.required),
-    roles: new FormArray([]),
+    roles: new FormArray([], Validators.required),
   });
 
   onSubmit() {
@@ -82,9 +81,8 @@ export class SidenavFormComponent implements OnInit {
       locked: status,
     };
 
-    this.controlUsersService.saveUser(user).subscribe((res) => {
-      console.log(res);
-    });
+    this.controlUsersService.saveUser(user).subscribe((res) => {});
+    this.drawerService.closeDrawer();
   }
 
   get rolesArray() {
