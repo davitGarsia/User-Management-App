@@ -17,8 +17,9 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue/dialogue.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 @NgModule({
-  declarations: [AppComponent, SidenavFormComponent, DialogueComponent],
+  declarations: [AppComponent, SidenavFormComponent, DialogueComponent, MainLayoutComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
