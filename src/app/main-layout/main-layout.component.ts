@@ -104,11 +104,18 @@ export class MainLayoutComponent implements OnInit {
     this.fetchUsers(users);
   }
 
-  openDialogue(id: any, e: any) {
+  openDialogue(row: any, e: any) {
     if (e.target.innerHTML == 'delete') {
-      this.controlUsersService.userId.id = id;
+      this.controlUsersService.userId.id = row.id;
 
-      let dialogRef = this.dialog.open(DialogueComponent, { width: '500px' });
+      let dialogRef = this.dialog.open(DialogueComponent, {
+        width: '500px',
+        data: {
+          firstName: row.firstName,
+          lastName: row.lastName,
+          id: row.id,
+        },
+      });
     }
   }
 

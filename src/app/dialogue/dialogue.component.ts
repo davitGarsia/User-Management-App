@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { ControlUsersService } from '../core/services/control-users.service';
 
 @Component({
@@ -10,7 +14,8 @@ import { ControlUsersService } from '../core/services/control-users.service';
 export class DialogueComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<any>,
-    private controlUsersService: ControlUsersService
+    private controlUsersService: ControlUsersService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {}
