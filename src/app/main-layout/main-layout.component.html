@@ -22,7 +22,7 @@
                 #text="ngModel"
                 [(ngModel)]="searchTerm"
                 name="userInput"
-                (ngModelChange)="applyFilter($event)"
+                (ngModelChange)="searchUsers($event)"
               />
             </mat-form-field>
           </form>

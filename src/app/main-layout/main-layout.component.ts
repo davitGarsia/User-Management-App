@@ -91,7 +91,7 @@ export class MainLayoutComponent implements OnInit {
     this.getUsers();
   }
 
-  applyFilter(term: any) {
+  searchUsers(term: any) {
     const users = {
       search: `${term}`,
       sortBy: 'email',
