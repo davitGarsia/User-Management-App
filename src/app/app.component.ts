@@ -15,5 +15,6 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  title = 'user-management-page';
   ngOnInit(): void {}
 }

@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
 import { DialogueComponent } from '../dialogue/dialogue.component';
+import { FindUser } from '../core/interfaces/findUser';
 
 @Component({
   selector: 'app-main-layout',
@@ -16,7 +17,6 @@ import { DialogueComponent } from '../dialogue/dialogue.component';
   styleUrls: ['./main-layout.component.css'],
 })
 export class MainLayoutComponent implements OnInit {
-  title = 'user-management-page';
   searchTerm = '';
   @ViewChild('f') userInput!: NgForm;
   showFiller = false;
@@ -62,7 +62,7 @@ export class MainLayoutComponent implements OnInit {
     });
   }
 
-  fetchUsers(users: any) {
+  fetchUsers(users: FindUser) {
     this.controlUsersService.getUsers(users).subscribe(({ data }) => {
       this.dataSource = data.entities;
       this.total = data.total;
@@ -101,12 +101,7 @@ export class MainLayoutComponent implements OnInit {
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
     };
-    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
-      this.dataSource = data.entities;
-      this.total = data.total;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+    this.fetchUsers(users);
   }
 
   openDialogue(id: any, e: any) {

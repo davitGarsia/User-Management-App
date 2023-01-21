@@ -97,7 +97,13 @@
                 >
                   status
                 </th>
-                <td mat-cell *matCellDef="let row">
+                <td
+                  mat-cell
+                  *matCellDef="let row"
+                  [ngStyle]="{
+                    color: row.locked ? 'green' : 'red'
+                  }"
+                >
                   {{ row.locked == true ? "Active" : "Inactive" }}
                 </td>
               </ng-container>
@@ -108,7 +114,7 @@
                 <td mat-cell *matCellDef="let row; let i = index">
                   <button mat-icon-button class="ml">
                     <span
-                      class="material-icons text-red-400 hover:text-red-700 px-3 py-2"
+                      class="material-icons text-red-400 hover:text-red-700 pl-2 pr-2 py-2"
                       >delete</span
                     >
                   </button>

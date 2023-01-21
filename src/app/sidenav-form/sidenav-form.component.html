@@ -12,11 +12,32 @@
     <mat-label>First Name</mat-label>
     <input matInput placeholder="John" formControlName="firstName" />
   </mat-form-field>
+  <span
+    *ngIf="
+      !userForm.get('firstName')?.valid &&
+      userForm.get('firstName')?.touched &&
+      !userForm.get('firstName')?.dirty
+    "
+    class="text-red-600"
+    >This field cannot not be empty</span
+  >
+  <span
+    *ngIf="userForm.get('firstName')?.errors?.['minlength']"
+    class="text-red-600"
+    >This field must include at least two characters</span
+  >
 
   <mat-form-field class="w-full">
     <mat-label>Last Name</mat-label>
     <input matInput placeholder="Doe" formControlName="lastName" />
   </mat-form-field>
+  <span
+    *ngIf="
+      !userForm.get('lastName')?.valid && userForm.get('lastName')?.touched
+    "
+    class="text-red-600"
+    >This field must include at least one character</span
+  >
 
   <mat-form-field class="w-full">
     <mat-label>Email</mat-label>
@@ -27,6 +48,18 @@
       formControlName="email"
     />
   </mat-form-field>
+  <span
+    *ngIf="
+      !userForm.get('email')?.valid &&
+      userForm.get('email')?.touched &&
+      !userForm.get('email')?.dirty
+    "
+    class="text-red-600"
+    >This form cannot be empty</span
+  >
+  <span *ngIf="userForm.get('email')?.errors?.['pattern']" class="text-red-600"
+    >Please, input a valid email address</span
+  >
 
   <mat-form-field class="w-full">
     <mat-label>ID</mat-label>
@@ -51,13 +84,13 @@
     </button>
     <div *ngFor="let roleControl of rolesArray.controls; let i = index">
       <mat-form-field class="w-full">
-        <mat-label>Roles</mat-label>
+        <mat-label>User</mat-label>
         <input matInput type="text" placeholder="Admin" [formControlName]="i" />
       </mat-form-field>
     </div>
   </div>
 
-  <div class="flex justify-between ml-3 mr-7">
+  <div class="flex justify-between ml-3 mr-7 mt-3">
     <button
       type="button"
       class="bg-gray-500 text-gray-100"

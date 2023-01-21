@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { DrawerService } from '../core/services/drawer.service';
   templateUrl: './sidenav-form.component.html',
   styleUrls: ['./sidenav-form.component.css'],
 })
-export class SidenavFormComponent implements OnInit {
+export class SidenavFormComponent implements OnInit, OnDestroy {
   showFiller = false;
 
   private eventSubscription!: Subscription;
@@ -96,5 +96,9 @@ export class SidenavFormComponent implements OnInit {
   close() {
     this.drawerService.closeDrawer();
     this.userForm.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.eventSubscription.unsubscribe();
   }
 }
