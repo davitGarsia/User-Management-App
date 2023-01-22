@@ -104,6 +104,8 @@ export class MainLayoutComponent implements OnInit {
     this.fetchUsers(users);
   }
 
+  // Dialogue on delete
+
   openDialogue(row: any, e: any) {
     if (e.target.innerHTML == 'delete') {
       this.controlUsersService.userId.id = row.id;
@@ -123,11 +125,7 @@ export class MainLayoutComponent implements OnInit {
     this.eventSubject.next(id);
   }
 
-  // camalize = function camalize(str: string) {
-  //   return str
-  //     .toLowerCase()
-  //     .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-  // };
+  // Sorting
 
   camelCase = function (str: any) {
     return str
@@ -153,34 +151,6 @@ export class MainLayoutComponent implements OnInit {
 
     this.fetchUsers(users);
   }
-
-  // sortByLastName() {
-  //   const users = {
-  //     search: '',
-  //     sortBy: 'lastName',
-  //     sortDirection: 'asc',
-  //     pageIndex: this.pageIndex,
-  //     pageSize: this.pageSize,
-  //     includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-  //     excludes: [],
-  //   };
-
-  //   this.fetchUsers(users);
-  // }
-
-  // sortByMail() {
-  //   const users = {
-  //     search: '',
-  //     sortBy: 'email',
-  //     sortDirection: 'asc',
-  //     pageIndex: this.pageIndex,
-  //     pageSize: this.pageSize,
-  //     includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-  //     excludes: [],
-  //   };
-
-  //   this.fetchUsers(users);
-  // }
 
   sortByStatus() {
     const users = {
