@@ -123,10 +123,27 @@ export class MainLayoutComponent implements OnInit {
     this.eventSubject.next(id);
   }
 
-  sortByName() {
+  // camalize = function camalize(str: string) {
+  //   return str
+  //     .toLowerCase()
+  //     .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+  // };
+
+  camelCase = function (str: any) {
+    return str
+      .replace(/\s(.)/g, function (a: any) {
+        return a.toUpperCase();
+      })
+      .replace(/\s/g, '')
+      .replace(/^(.)/, function (b: any) {
+        return b.toLowerCase();
+      });
+  };
+
+  sortUsers(param: any) {
     const users = {
       search: '',
-      sortBy: 'firstName',
+      sortBy: `${this.camelCase(param)}`,
       sortDirection: 'asc',
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
@@ -137,33 +154,33 @@ export class MainLayoutComponent implements OnInit {
     this.fetchUsers(users);
   }
 
-  sortByLastName() {
-    const users = {
-      search: '',
-      sortBy: 'lastName',
-      sortDirection: 'asc',
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-      excludes: [],
-    };
+  // sortByLastName() {
+  //   const users = {
+  //     search: '',
+  //     sortBy: 'lastName',
+  //     sortDirection: 'asc',
+  //     pageIndex: this.pageIndex,
+  //     pageSize: this.pageSize,
+  //     includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+  //     excludes: [],
+  //   };
 
-    this.fetchUsers(users);
-  }
+  //   this.fetchUsers(users);
+  // }
 
-  sortByMail() {
-    const users = {
-      search: '',
-      sortBy: 'email',
-      sortDirection: 'asc',
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-      excludes: [],
-    };
+  // sortByMail() {
+  //   const users = {
+  //     search: '',
+  //     sortBy: 'email',
+  //     sortDirection: 'asc',
+  //     pageIndex: this.pageIndex,
+  //     pageSize: this.pageSize,
+  //     includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+  //     excludes: [],
+  //   };
 
-    this.fetchUsers(users);
-  }
+  //   this.fetchUsers(users);
+  // }
 
   sortByStatus() {
     const users = {

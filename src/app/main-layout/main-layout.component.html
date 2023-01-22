@@ -38,10 +38,11 @@
 
               <ng-container matColumnDef="first name">
                 <th
+                  #colDef
                   mat-header-cell
                   *matHeaderCellDef
                   class="px-2 py-1 cursor-pointer text-base"
-                  (click)="sortByName()"
+                  (click)="sortUsers(colDef.innerHTML)"
                 >
                   first name
                 </th>
@@ -52,10 +53,11 @@
 
               <ng-container matColumnDef="last name">
                 <th
+                  #colDef
                   mat-header-cell
                   *matHeaderCellDef
                   class="px-2 py-1 cursor-pointer text-base"
-                  (click)="sortByLastName()"
+                  (click)="sortUsers(colDef.innerHTML)"
                 >
                   last name
                 </th>
@@ -64,10 +66,11 @@
 
               <ng-container matColumnDef="email">
                 <th
+                  #colDef
                   mat-header-cell
                   *matHeaderCellDef
                   class="px-2 py-1 cursor-pointer text-base"
-                  (click)="sortByMail()"
+                  (click)="sortUsers(colDef.innerHTML)"
                 >
                   email
                 </th>
@@ -75,7 +78,6 @@
                   mat-cell
                   *matCellDef="let row; let i = index"
                   class="cursor-pointer"
-                  (click)="emitToChild(row.id)"
                 >
                   {{ row.email }}
                 </td>
@@ -90,6 +92,7 @@
 
               <ng-container matColumnDef="status">
                 <th
+                  #colDef
                   mat-header-cell
                   *matHeaderCellDef
                   class="px-2 py-1 cursor-pointer text-base"
