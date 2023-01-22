@@ -127,13 +127,13 @@ export class MainLayoutComponent implements OnInit {
 
   // Sorting
 
-  camelCase = function (str: any) {
+  camelCase = (str: string) => {
     return str
-      .replace(/\s(.)/g, function (a: any) {
+      .replace(/\s(.)/g, (a: string) => {
         return a.toUpperCase();
       })
       .replace(/\s/g, '')
-      .replace(/^(.)/, function (b: any) {
+      .replace(/^(.)/, (b: string) => {
         return b.toLowerCase();
       });
   };
