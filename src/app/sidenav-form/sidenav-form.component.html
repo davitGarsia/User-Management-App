@@ -75,6 +75,13 @@
   </mat-form-field>
 
   <div formArrayName="roles">
+    <mat-form-field
+      class="w-full"
+      *ngFor="let role of rolesArray.controls; let i = index"
+    >
+      <mat-label>Role</mat-label>
+      <input matInput type="text" placeholder="Admin" [formControlName]="i" />
+    </mat-form-field>
     <button
       type="button"
       class="text-sm underline mt-1 mb-3"
@@ -82,12 +89,6 @@
     >
       Add role
     </button>
-    <div *ngFor="let roleControl of rolesArray.controls; let i = index">
-      <mat-form-field class="w-full">
-        <mat-label>User</mat-label>
-        <input matInput type="text" placeholder="Admin" [formControlName]="i" />
-      </mat-form-field>
-    </div>
   </div>
 
   <div class="flex justify-between ml-3 mr-7 mt-3">

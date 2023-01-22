@@ -41,8 +41,8 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
           id: res.data.entities[0].id,
           firstName: res.data.entities[0].firstName,
           lastName: res.data.entities[0].lastName,
-
           email: res.data.entities[0].email,
+          roles: res.data.entities[0].roles,
         });
       });
     });
@@ -60,7 +60,7 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
       Validators.minLength(2),
     ]),
     lastName: new FormControl(null, Validators.required),
-    roles: new FormArray([], Validators.required),
+    roles: new FormArray([new FormControl(null, Validators.required)]),
   });
 
   onSubmit() {
