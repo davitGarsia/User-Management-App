@@ -12,6 +12,7 @@ import { DrawerService } from '../core/services/drawer.service';
 })
 export class SidenavFormComponent implements OnInit, OnDestroy {
   showFiller = false;
+  error = false;
 
   private eventSubscription!: Subscription;
 
@@ -81,8 +82,15 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
       locked: status,
     };
 
-    this.controlUsersService.saveUser(user).subscribe((res) => {});
-    this.drawerService.closeDrawer();
+    this.controlUsersService.saveUser(user).subscribe({
+      next: (res) => console.log(res),
+      error: (err) => {
+        this.error = err.error.message = 'User already exists' ? true : false;
+        if (!err) {
+          this.drawerService.closeDrawer();
+        }
+      },
+    });
   }
 
   get rolesArray() {

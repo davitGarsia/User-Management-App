@@ -27,7 +27,17 @@
             </mat-form-field>
           </form>
           <div class="mat-elevation-z8 w-full mb-5">
-            <table mat-table [dataSource]="dataSource" class="w-full">
+            <div class="flex w-96 h-28" *ngIf="error">
+              <p class="text-red-700 mx-auto">
+                An unknown error occured, please try again later
+              </p>
+            </div>
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="w-full"
+              *ngIf="!error"
+            >
               <!-- ID Column -->
               <ng-container matColumnDef="id">
                 <th mat-header-cell *matHeaderCellDef class="text-base">ID</th>

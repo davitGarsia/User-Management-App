@@ -108,4 +108,10 @@
       Save
     </button>
   </div>
+
+  <div class="flex mt-5" *ngIf="error">
+    <p class="text-red-700">
+      Could not save user. User already exists with this email!
+    </p>
+  </div>
 </form>

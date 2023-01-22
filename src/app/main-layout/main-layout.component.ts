@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subject } from 'rxjs';
+import { catchError, map, Subject } from 'rxjs';
 import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
 import { DialogueComponent } from '../dialogue/dialogue.component';
@@ -20,6 +20,7 @@ export class MainLayoutComponent implements OnInit {
   searchTerm = '';
   @ViewChild('f') userInput!: NgForm;
   showFiller = false;
+  error = false;
 
   eventSubject: Subject<void> = new Subject<void>();
 
@@ -62,12 +63,24 @@ export class MainLayoutComponent implements OnInit {
     });
   }
 
+  // fetchUsers(users: FindUser) {
+  //   this.controlUsersService.getUsers(users).subscribe(({ data }) => {
+  //     this.dataSource = data.entities;
+  //     this.total = data.total;
+  //     this.dataSource.paginator = this.paginator;
+  //     this.dataSource.sort = this.sort;
+  //   });
+  // }
+
   fetchUsers(users: FindUser) {
-    this.controlUsersService.getUsers(users).subscribe(({ data }) => {
-      this.dataSource = data.entities;
-      this.total = data.total;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.controlUsersService.getUsers(users).subscribe({
+      next: ({ data }) => {
+        this.dataSource = data.entities;
+        this.total = data.total;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error: (err) => (this.error = true),
     });
   }
 
