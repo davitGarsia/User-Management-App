@@ -27,8 +27,11 @@
             </mat-form-field>
           </form>
           <div class="mat-elevation-z8 w-full mb-5">
-            <div class="flex w-96 h-28" *ngIf="error">
-              <p class="text-red-700 mx-auto">
+            <div
+              class="flex w-96 h-12 bg-red-300 border-red-600 rounded"
+              *ngIf="error"
+            >
+              <p class="flex text-red-700 mx-auto items-center justify-center">
                 An unknown error occured, please try again later
               </p>
             </div>
