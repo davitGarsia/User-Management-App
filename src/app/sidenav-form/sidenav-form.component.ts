@@ -83,12 +83,13 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     };
 
     this.controlUsersService.saveUser(user).subscribe({
-      next: (res) => {},
-      error: (err) => {
-        this.error = err.error.message = 'User already exists' ? true : false;
-        if (!err) {
+      next: (res) => {
+        if (res.success) {
           this.drawerService.closeDrawer();
         }
+      },
+      error: (err) => {
+        this.error = err.error.message = 'User already exists' ? true : false;
       },
     });
   }
