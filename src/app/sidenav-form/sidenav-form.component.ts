@@ -37,12 +37,14 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
         excludes: [],
       };
       this.controlUsersService.getUsers(users).subscribe((res) => {
+        console.log(res.data.entities);
         this.userForm.patchValue({
           id: res.data.entities[0].id,
           firstName: res.data.entities[0].firstName,
           lastName: res.data.entities[0].lastName,
           email: res.data.entities[0].email,
           roles: res.data.entities[0].roles,
+          userStatus: res.data.entities[0].locked,
         });
       });
     });
@@ -67,7 +69,7 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     if (this.userForm.invalid) return;
 
     const id = this.userForm.value.id;
-    const status = (this.userForm.value.userStatus = 'Active' ? true : false);
+    const status = this.userForm.value.userStatus;
     const firstName = this.userForm.value.firstName;
     const email = this.userForm.value.email;
     const lastName = this.userForm.value.lastName;
