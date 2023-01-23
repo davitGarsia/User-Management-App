@@ -43,6 +43,8 @@ export class MainLayoutComponent implements OnInit {
     'actions',
   ];
 
+  roles = [];
+
   constructor(
     private controlUsersService: ControlUsersService,
     private drawerService: DrawerService,
@@ -82,6 +84,20 @@ export class MainLayoutComponent implements OnInit {
       },
       error: (err) => (this.error = true),
     });
+    const body = {
+      typeId: 4,
+      sortBy: 'name',
+      sortDirection: 'asc',
+      pageIndex: 0,
+      pageSize: 50,
+      includes: ['code', 'name'],
+    };
+    this.controlUsersService.getRoles(body).subscribe({
+      next: ({ data }) =>
+        data.entities.forEach((entity: any) => {
+          this.roles = entity.name;
+        }),
+    });
   }
 
   getUsers() {
@@ -109,7 +125,7 @@ export class MainLayoutComponent implements OnInit {
       search: `${term}`,
       sortBy: 'email',
       sortDirection: 'asc',
-      pageIndex: this.pageIndex,
+      pageIndex: 0,
       pageSize: this.pageSize,
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
