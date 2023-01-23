@@ -5,6 +5,7 @@ import {
   OnDestroy,
   ElementRef,
   ViewChild,
+  Inject,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -15,6 +16,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
+import { MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
 
 @Component({
   selector: 'app-sidenav-form',
@@ -23,6 +25,7 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class SidenavFormComponent implements OnInit, OnDestroy {
   separatorKeysCodes: number[] = [ENTER, COMMA];
+
   roleControl = new FormControl();
   filteredRoles!: Observable<string[]>;
   roles: string[] = [];
@@ -52,7 +55,6 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
 
     // Clear the input value
     event.chipInput!.clear();
-
     this.roleControl.setValue(null);
   }
 
@@ -119,10 +121,9 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     this.controlUsersService.getRoles(body).subscribe({
       next: ({ data }) =>
         data.entities.forEach((entity: any) => {
-          this.allRoles = entity.name;
+          this.allRoles.push(entity.name);
         }),
     });
-
     this.filteredRoles = this.roleControl.valueChanges.pipe(
       startWith(null),
       map((role: any) => (role ? this.filter(role) : this.allRoles.slice()))
@@ -187,6 +188,7 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
   close() {
     this.drawerService.closeDrawer();
     this.userForm.reset();
+    this.roles = [];
   }
 
   ngOnDestroy(): void {

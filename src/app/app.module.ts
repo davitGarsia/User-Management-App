@@ -18,9 +18,13 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue/dialogue.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
-import { MatChipsModule } from '@angular/material/chips';
+import {
+  MatChipsModule,
+  MAT_CHIPS_DEFAULT_OPTIONS,
+} from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
+
 @NgModule({
   declarations: [
     AppComponent,
