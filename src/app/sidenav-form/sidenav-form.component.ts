@@ -1,9 +1,20 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
 import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidenav-form',
@@ -11,6 +22,14 @@ import { DrawerService } from '../core/services/drawer.service';
   styleUrls: ['./sidenav-form.component.css'],
 })
 export class SidenavFormComponent implements OnInit, OnDestroy {
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  roleControl = new FormControl();
+  filteredRoles!: Observable<string[]>;
+  roles: string[] = [];
+  allRoles: string[] = [];
+
+  @ViewChild('roleInput') roleInput!: ElementRef<HTMLInputElement>;
+
   showFiller = false;
   error = false;
 
@@ -23,6 +42,46 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     private drawerService: DrawerService
   ) {}
 
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      this.roles.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.roleControl.setValue(null);
+  }
+
+  remove(role: string): void {
+    const index = this.roles.indexOf(role);
+
+    if (index >= 0) {
+      this.roles.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.roles.push(event.option.viewValue);
+    this.roleInput.nativeElement.value = '';
+    this.roleControl.setValue(null);
+  }
+  //
+
+  //
+
+  filter(value: string) {
+    const filterValue = value.toLowerCase();
+
+    return this.allRoles.filter((role) =>
+      role.toLowerCase().includes(filterValue)
+    );
+  }
+
+  ///
   ngOnInit() {
     this.eventSubscription = this.events.subscribe((id) => {
       this.drawerService.openDrawer();
@@ -37,17 +96,37 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
         excludes: [],
       };
       this.controlUsersService.getUsers(users).subscribe((res) => {
-        console.log(res.data.entities);
         this.userForm.patchValue({
           id: res.data.entities[0].id,
           firstName: res.data.entities[0].firstName,
           lastName: res.data.entities[0].lastName,
           email: res.data.entities[0].email,
-          roles: res.data.entities[0].roles,
+
           userStatus: res.data.entities[0].locked,
         });
+        this.roles = res.data.entities[0].roles;
       });
     });
+
+    const body = {
+      typeId: 4,
+      sortBy: 'name',
+      sortDirection: 'asc',
+      pageIndex: 0,
+      pageSize: 50,
+      includes: ['code', 'name'],
+    };
+    this.controlUsersService.getRoles(body).subscribe({
+      next: ({ data }) =>
+        data.entities.forEach((entity: any) => {
+          this.allRoles = entity.name;
+        }),
+    });
+
+    this.filteredRoles = this.roleControl.valueChanges.pipe(
+      startWith(null),
+      map((role: any) => (role ? this.filter(role) : this.allRoles.slice()))
+    );
   }
 
   userForm: FormGroup = new FormGroup({
@@ -62,7 +141,7 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
       Validators.minLength(2),
     ]),
     lastName: new FormControl(null, Validators.required),
-    roles: new FormArray([new FormControl(null, Validators.required)]),
+    //roles: new FormControl(null, Validators.required),
   });
 
   onSubmit() {
@@ -73,7 +152,8 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     const firstName = this.userForm.value.firstName;
     const email = this.userForm.value.email;
     const lastName = this.userForm.value.lastName;
-    const roles = this.userForm.get('roles')?.value;
+    //const roles = this.userForm.get('roles')?.value;
+    const roles = this.roles;
 
     const user = {
       id: id,

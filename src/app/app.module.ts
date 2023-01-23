@@ -18,8 +18,17 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogueComponent } from './dialogue/dialogue.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
-  declarations: [AppComponent, SidenavFormComponent, DialogueComponent, MainLayoutComponent],
+  declarations: [
+    AppComponent,
+    SidenavFormComponent,
+    DialogueComponent,
+    MainLayoutComponent,
+  ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -35,6 +44,9 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatIconModule,
   ],
   providers: [
     {
@@ -43,6 +55,7 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
       multi: true,
     },
   ],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {}
