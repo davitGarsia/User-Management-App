@@ -5,9 +5,8 @@ import {
   OnDestroy,
   ElementRef,
   ViewChild,
-  Inject,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
 import { ControlUsersService } from '../core/services/control-users.service';
@@ -16,7 +15,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, startWith } from 'rxjs/operators';
-import { MAT_CHIPS_DEFAULT_OPTIONS } from '@angular/material/chips';
 
 @Component({
   selector: 'app-sidenav-form',
@@ -177,13 +175,13 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  get rolesArray() {
-    return <FormArray>this.userForm.get('roles');
-  }
+  // get rolesArray() {
+  //   return <FormArray>this.userForm.get('roles');
+  // }
 
-  onAddRole() {
-    this.rolesArray.push(new FormControl(''));
-  }
+  // onAddRole() {
+  //   this.rolesArray.push(new FormControl(''));
+  // }
 
   close() {
     this.drawerService.closeDrawer();

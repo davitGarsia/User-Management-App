@@ -5,7 +5,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, map, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
 import { DialogueComponent } from '../dialogue/dialogue.component';
@@ -42,8 +42,6 @@ export class MainLayoutComponent implements OnInit {
     'status',
     'actions',
   ];
-
-  //roles = [];
 
   constructor(
     private controlUsersService: ControlUsersService,
