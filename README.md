@@ -7,8 +7,8 @@ Clicking on first name, last name, email and status headers filters data and arr
 Clicking on each user's email field opens the edet field with the respective user's data in the form.
 Deleting functionality comprises of dialogue-based assurance that the user is trully willing to delete certain user from the database.
 
-The add button opens the field enabling the user to input and store data. Every field in the form is compulsory except id. User can only 
-have one status but multiple roles. Roles to choose from are fetched from server and rendered after clickiing/typing in the field.
+The add button opens the field enabling the user to input and store data. Every field in the form is compulsory except 'id'. User can only 
+have one status but multiple roles. Roles to choose from are fetched from server and rendered after clicking/typing in the field.
 If all the fields are valid, 'save' button saves the user and the sidenav is hidden.
 'Cancel' and X button in the sidenav form hide and reset the form.
 
