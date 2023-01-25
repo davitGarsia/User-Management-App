@@ -1,4 +1,4 @@
-# UserManagementApp
+# User Management App
 
 The application helps manage users' personal data. The data is fetched and displayed in the form of table as soon as the application
 is loaded.
@@ -12,7 +12,7 @@ have one status but multiple roles. Roles to choose from are fetched from server
 If all the fields are valid, 'save' button saves the user and the sidenav is hidden.
 'Cancel' and X button in the sidenav form hide and reset the form.
 
-
+---
 
 
 
