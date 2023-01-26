@@ -4,7 +4,7 @@ The application helps manage users' personal data. The data is fetched and displ
 is loaded.
 User can filter users instantly with 'Search Users' form at the top.
 Clicking on first name, last name, email and status headers filters data and arranges it respectively.
-Clicking on each user's email field opens the edet field with the respective user's data in the form.
+Clicking on each user's email field opens the edit field with the respective user's data in the form.
 Deleting functionality comprises of dialogue-based assurance that the user is trully willing to delete certain user from the database.
 
 The add button opens the field enabling the user to input and store data. Every field in the form is compulsory except 'id'. User can only 
