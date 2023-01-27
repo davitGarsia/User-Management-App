@@ -63,14 +63,6 @@ export class MainLayoutComponent implements OnInit {
     });
   }
 
-  // fetchUsers(users: FindUser) {
-  //   this.controlUsersService.getUsers(users).subscribe(({ data }) => {
-  //     this.dataSource = data.entities;
-  //     this.total = data.total;
-  //     this.dataSource.paginator = this.paginator;
-  //     this.dataSource.sort = this.sort;
-  //   });
-  // }
 
   fetchUsers(users: FindUser) {
     this.controlUsersService.getUsers(users).subscribe({
