@@ -10,6 +10,7 @@ import { ControlUsersService } from '../core/services/control-users.service';
 import { DrawerService } from '../core/services/drawer.service';
 import { DialogueComponent } from '../dialogue/dialogue.component';
 import { FindUser } from '../core/interfaces/findUser';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -46,13 +47,20 @@ export class MainLayoutComponent implements OnInit {
   constructor(
     private controlUsersService: ControlUsersService,
     private drawerService: DrawerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   // Getting Users
 
   ngOnInit() {
-    this.getUsers();
+    this.route.queryParams.subscribe((params) => {
+      this.searchTerm = params['search'];
+      this.pageIndex = params['page'];
+      this.pageSize = params['size'];
+      this.persistData();
+    });
 
     this.drawerService.isDrawerOpen$.subscribe((res: boolean) => {
       if (res) {
@@ -60,6 +68,27 @@ export class MainLayoutComponent implements OnInit {
       } else {
         this.drawer?.close();
       }
+    });
+  }
+
+  persistData() {
+    const users = {
+      search: this.searchTerm,
+      sortBy: 'firstName',
+      sortDirection: 'asc',
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
+      excludes: [],
+    };
+    this.controlUsersService.getUsers(users).subscribe({
+      next: ({ data }) => {
+        this.dataSource = data.entities;
+        this.total = data.total;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      },
+      error: (err) => (this.error = true),
     });
   }
 
@@ -80,7 +109,7 @@ export class MainLayoutComponent implements OnInit {
 
   getUsers() {
     const users = {
-      search: '',
+      search: this.searchTerm,
       sortBy: 'firstName',
       sortDirection: 'asc',
       pageIndex: this.pageIndex,
@@ -88,27 +117,27 @@ export class MainLayoutComponent implements OnInit {
       includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
       excludes: [],
     };
-
     this.fetchUsers(users);
   }
 
   pageEvent($event: PageEvent) {
     this.pageIndex = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    this.getUsers();
+
+    this.router.navigate(['.'], {
+      queryParams: { page: this.pageIndex, size: this.pageSize },
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+    });
+    this.persistData();
   }
 
   searchUsers(term: any) {
-    const users = {
-      search: `${term}`,
-      sortBy: 'email',
-      sortDirection: 'asc',
-      pageIndex: 0,
-      pageSize: this.pageSize,
-      includes: ['id', 'email', 'firstName', 'lastName', 'roles', 'locked'],
-      excludes: [],
-    };
-    this.fetchUsers(users);
+    this.router.navigate(['.'], {
+      queryParams: { search: term, page: 0 },
+      relativeTo: this.route,
+      queryParamsHandling: 'merge',
+    });
   }
 
   // Dialogue on delete
