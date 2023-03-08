@@ -6,7 +6,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
 import { ControlUsersService } from '../core/services/control-users.service';
@@ -46,12 +46,10 @@ export class SidenavFormComponent implements OnInit, OnDestroy {
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
-    // Add our fruit
     if (value) {
       this.roles.push(value);
     }
 
-    // Clear the input value
     event.chipInput!.clear();
     this.roleControl.setValue(null);
   }
